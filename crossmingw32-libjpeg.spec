@@ -3,7 +3,7 @@ Summary:	Library for handling different jpeg files - Mingw32 cross version
 Summary(pl):	Biblioteka do manipulacji plikami w formacie jpeg - wersja skro¶na dla Mingw32
 Name:		crossmingw32-%{realname}
 Version:	6b
-Release:	1
+Release:	2
 License:	distributable
 Group:		Libraries
 Source0:	ftp://ftp.uu.net/graphics/jpeg/jpegsrc.v%{version}.tar.gz
@@ -28,6 +28,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		__cc		%{target}-gcc
 %define		__cxx		%{target}-g++
+
+%ifarch alpha sparc sparc64 sparcv9
+%define		optflags	-O2
+%endif
 
 %description
 The libjpeg package contains a library of functions for manipulating
