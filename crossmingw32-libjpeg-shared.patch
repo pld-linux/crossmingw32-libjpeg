@@ -1,0 +1,13 @@
+diff -ruN jpeg-6b./makefile.cfg jpeg-6b/makefile.cfg
+--- jpeg-6b./makefile.cfg	2003-12-25 03:23:00.000000000 +0100
++++ jpeg-6b/makefile.cfg	2003-12-25 03:26:30.147554616 +0100
+@@ -166,6 +166,9 @@
+ 	$(AR) libjpeg.a  $(LIBOBJECTS)
+ 	$(AR2) libjpeg.a
+ 
++jpeg.dll: $(LIBOBJECTS)
++	$(CC) $(LIBOBJECTS) -shared -Wl,--enable-auto-image-base -o jpeg.dll -Wl,--out-implib,libjpeg.dll.a
++
+ # with libtool:
+ libjpeg.la:  $(LIBOBJECTS)
+ 	$(LIBTOOL) --mode=link $(CC) -o libjpeg.la $(LIBOBJECTS) \
