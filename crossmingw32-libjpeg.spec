@@ -114,7 +114,7 @@ old_library='libjpeg.a'
 # Libraries that this one depends upon.
 dependency_libs=''
 
-# Version information for libz.
+# Version information for libjpeg.
 current=0
 age=0
 revision=0
