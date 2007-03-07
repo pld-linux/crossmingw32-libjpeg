@@ -5,7 +5,7 @@ Name:		crossmingw32-%{realname}
 Version:	6b
 Release:	5
 License:	distributable
-Group:		Libraries
+Group:		Development/Libraries
 Source0:	ftp://ftp.uu.net/graphics/jpeg/jpegsrc.v%{version}.tar.gz
 # Source0-md5:	dbd5f3b47ed13132f04c685d608a7547
 Patch0:		%{realname}-DESTDIR.patch
@@ -13,10 +13,8 @@ Patch1:		%{realname}-include.patch
 Patch2:		%{realname}-c++.patch
 Patch3:		%{name}-shared.patch
 URL:		http://www.ijg.org/
-Requires:	crossmingw32-runtime
 BuildRequires:	crossmingw32-gcc
-BuildRequires:	crossmingw32-w32api
-BuildRequires:	libtool
+Requires:	crossmingw32-runtime
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		no_install_post_strip	1
@@ -24,12 +22,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		target			i386-mingw32
 %define		target_platform 	i386-pc-mingw32
 %define		arch			%{_prefix}/%{target}
-%define		gccarch			%{_prefix}/lib/gcc-lib/%{target}
-%define		gcclib			%{_prefix}/lib/gcc-lib/%{target}/%{version}
 
 %define		_sysprefix		/usr
 %define		_prefix			%{_sysprefix}/%{target}
-%define		_pkgconfigdir		%{_prefix}/lib/pkgconfig
+%define		_dlldir			/usr/share/wine/windows/system
 %define		__cc			%{target}-gcc
 %define		__cxx			%{target}-g++
 
@@ -41,13 +37,30 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 The libjpeg package contains a library of functions for manipulating
 JPEG images.
 
+This package contains the cross version for Win32.
+
 %description -l pl.UTF-8
 Ten pakiet zawiera bibliotekę funkcji do manipulacji plikami jpeg.
+
+Ten pakiet zawiera wersję skrośną dla Win32.
+
+%package static
+Summary:	Static libjpeg library (cross mingw32 version)
+Summary(pl.UTF-8):	Statyczna biblioteka libjpeg (wersja skrośna mingw32)
+Group:		Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+
+%description static
+Static libjpeg library (cross mingw32 version).
+
+%description static -l pl.UTF-8
+Statyczna biblioteka libjpeg (wersja skrośna mingw32).
 
 %package dll
 Summary:	libjpeg - DLL library for Windows
 Summary(pl.UTF-8):	libjpeg - biblioteka DLL dla Windows
 Group:		Applications/Emulators
+Requires:	wine
 
 %description dll
 libjpeg - DLL library for Windows.
@@ -137,10 +150,14 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%{_libdir}/libjpeg.dll.a
+%{_libdir}/libjpeg.la
 %{_includedir}/*.h
-%{_libdir}/*.la
-%{_libdir}/*.a
+
+%files static
+%defattr(644,root,root,755)
+%{_libdir}/libjpeg.a
 
 %files dll
 %defattr(644,root,root,755)
-%{_bindir}/*.dll
+%{_bindir}/libjpeg.dll
