@@ -133,16 +133,18 @@ dlpreopen=''
 libdir='%{_libdir}'
 EOF
 
+%if 0%{!?debug:1}
 %{target}-strip jpeg.dll
 %{target}-strip -g -R.comment -R.note *.a
+%endif
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT%{_prefix}/{include,lib,bin}
+install -d $RPM_BUILD_ROOT{%{_includedir},%{_libdir},%{_dlldir}}
 
 install jconfig.h jerror.h jmorecfg.h jpeglib.h jversion.h $RPM_BUILD_ROOT%{_includedir}
 install *.a $RPM_BUILD_ROOT%{_libdir}
-install jpeg.dll $RPM_BUILD_ROOT%{_bindir}/libjpeg.dll
+install jpeg.dll $RPM_BUILD_ROOT%{_dlldir}/libjpeg.dll
 install libjpeg.la $RPM_BUILD_ROOT%{_libdir}
 
 %clean
@@ -160,4 +162,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files dll
 %defattr(644,root,root,755)
-%{_bindir}/libjpeg.dll
+%{_dlldir}/libjpeg.dll
