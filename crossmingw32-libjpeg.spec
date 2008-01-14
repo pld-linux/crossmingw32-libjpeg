@@ -21,10 +21,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %define		target			i386-mingw32
 %define		target_platform 	i386-pc-mingw32
-%define		arch			%{_prefix}/%{target}
 
 %define		_sysprefix		/usr
 %define		_prefix			%{_sysprefix}/%{target}
+%define		_libdir			%{_prefix}/lib
 %define		_dlldir			/usr/share/wine/windows/system
 %define		__cc			%{target}-gcc
 %define		__cxx			%{target}-g++
@@ -82,7 +82,7 @@ LD=%{target}-ld ; export LD
 AR=%{target}-ar ; export AR
 AS=%{target}-as ; export AS
 CROSS_COMPILE=1 ; export CROSS_COMPILE
-CPPFLAGS="-I%{arch}/include" ; export CPPFLAGS
+CPPFLAGS="-I%{_includedir}" ; export CPPFLAGS
 RANLIB=%{target}-ranlib ; export RANLIB
 LDSHARED="%{target}-gcc -shared" ; export LDSHARED
 TARGET="%{target}" ; export TARGET
@@ -90,8 +90,7 @@ TARGET="%{target}" ; export TARGET
 %configure \
 	--target=%{target} \
 	--host=%{target} \
-	--build=i386-linux \
-	--prefix=%{arch}
+	--build=i386-linux
 
 %{__make}
 %{__make} jpeg.dll
