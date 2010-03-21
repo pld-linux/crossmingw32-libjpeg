@@ -2,16 +2,13 @@
 Summary:	Library for handling different jpeg files - Mingw32 cross version
 Summary(pl.UTF-8):	Biblioteka do manipulacji plikami w formacie jpeg - wersja skrośna dla Mingw32
 Name:		crossmingw32-%{realname}
-Version:	6b
-Release:	6
+Version:	8a
+Release:	1
 License:	distributable
 Group:		Development/Libraries
-Source0:	ftp://ftp.uu.net/graphics/jpeg/jpegsrc.v%{version}.tar.gz
-# Source0-md5:	dbd5f3b47ed13132f04c685d608a7547
-Patch0:		%{realname}-DESTDIR.patch
-Patch1:		%{realname}-include.patch
-Patch2:		%{realname}-c++.patch
-Patch3:		%{name}-shared.patch
+Source0:	http://www.ijg.org/files/jpegsrc.v%{version}.tar.gz
+# Source0-md5:	5146e68be3633c597b0d14d3ed8fa2ea
+Patch0:		%{realname}-maxmem-sysconf.patch
 URL:		http://www.ijg.org/
 BuildRequires:	autoconf >= 2.50
 BuildRequires:	automake
@@ -36,6 +33,8 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # arch-specific flags (like alpha's -mieee) are not valid for i386 gcc
 %define		optflags	-O2
 %endif
+# -z options are invalid for mingw linker
+%define		filterout_ld	-Wl,-z,.*
 
 %description
 The libjpeg package contains a library of functions for manipulating
@@ -75,49 +74,26 @@ libjpeg - biblioteka DLL dla Windows.
 %prep
 %setup -q -n jpeg-%{version}
 %patch0 -p1
-%patch1 -p1
-%patch2 -p1
-%patch3 -p1
-
-cp /usr/share/automake/config.* .
-
-# hack: use recent libtool by configuring for mingw32 in separate dir
-# (cannot regenerate main ac/lt because of missing configure.in)
-mkdir lthack
-cd lthack
-cat >configure.ac <<EOF
-AC_INIT(lthack, 0)
-AC_CONFIG_AUX_DIR(..)
-AC_PROG_LIBTOOL
-EOF
 
 %build
-cd lthack
-%{__libtoolize}
-%{__aclocal}
-%{__autoconf}
-%configure \
-	--target=%{target} \
-	--host=%{target}
-cd ..
-
 %configure \
 	--target=%{target} \
 	--host=%{target} \
-	--enable-shared \
-	--enable-static
-
-cp -f lthack/libtool .
+	--disable-silent-rules
 
 %{__make}
 
 %install
 rm -rf $RPM_BUILD_ROOT
-install -d $RPM_BUILD_ROOT{%{_includedir},%{_libdir},%{_dlldir}}
 
-%{__make} install-headers install-lib \
-	libdir=%{_libdir} \
+%{__make} install \
 	DESTDIR=$RPM_BUILD_ROOT
+
+install jversion.h $RPM_BUILD_ROOT%{_includedir}
+
+# remove HAVE_STD{DEF,LIB}_H
+# (not necessary but may generate warnings confusing autoconf)
+sed -i -e 's#.*HAVE_STD..._H.*##g' $RPM_BUILD_ROOT%{_includedir}/jconfig.h
 
 install -d $RPM_BUILD_ROOT%{_dlldir}
 mv -f $RPM_BUILD_ROOT%{_prefix}/bin/*.dll $RPM_BUILD_ROOT%{_dlldir}
@@ -139,6 +115,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/jerror.h
 %{_includedir}/jmorecfg.h
 %{_includedir}/jpeglib.h
+%{_includedir}/jversion.h
 
 %files static
 %defattr(644,root,root,755)
