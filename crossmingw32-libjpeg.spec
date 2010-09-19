@@ -1,6 +1,6 @@
 %define		realname	libjpeg
-Summary:	Library for handling different jpeg files - Mingw32 cross version
-Summary(pl.UTF-8):	Biblioteka do manipulacji plikami w formacie jpeg - wersja skrośna dla Mingw32
+Summary:	Library for handling different jpeg files - MinGW32 cross version
+Summary(pl.UTF-8):	Biblioteka do manipulacji plikami w formacie jpeg - wersja skrośna dla MinGW32
 Name:		crossmingw32-%{realname}
 Version:	8b
 Release:	1
@@ -48,16 +48,16 @@ Ten pakiet zawiera bibliotekę funkcji do manipulacji plikami jpeg.
 Ten pakiet zawiera wersję skrośną dla Win32.
 
 %package static
-Summary:	Static libjpeg library (cross mingw32 version)
-Summary(pl.UTF-8):	Statyczna biblioteka libjpeg (wersja skrośna mingw32)
+Summary:	Static libjpeg library (cross MinGW32 version)
+Summary(pl.UTF-8):	Statyczna biblioteka libjpeg (wersja skrośna MinGW32)
 Group:		Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 
 %description static
-Static libjpeg library (cross mingw32 version).
+Static libjpeg library (cross MinGW32 version).
 
 %description static -l pl.UTF-8
-Statyczna biblioteka libjpeg (wersja skrośna mingw32).
+Statyczna biblioteka libjpeg (wersja skrośna MinGW32).
 
 %package dll
 Summary:	libjpeg - DLL library for Windows
