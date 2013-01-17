@@ -2,12 +2,12 @@
 Summary:	Library for handling different jpeg files - MinGW32 cross version
 Summary(pl.UTF-8):	Biblioteka do manipulacji plikami w formacie jpeg - wersja skrośna dla MinGW32
 Name:		crossmingw32-%{realname}
-Version:	8d
+Version:	9
 Release:	1
 License:	distributable
 Group:		Development/Libraries
 Source0:	http://www.ijg.org/files/jpegsrc.v%{version}.tar.gz
-# Source0-md5:	52654eb3b2e60c35731ea8fc87f1bd29
+# Source0-md5:	b397211ddfd506b92cd5e02a22ac924d
 Patch0:		%{realname}-maxmem-sysconf.patch
 URL:		http://www.ijg.org/
 BuildRequires:	autoconf >= 2.50
@@ -33,8 +33,10 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 # arch-specific flags (like alpha's -mieee) are not valid for i386 gcc
 %define		optflags	-O2
 %endif
-# -z options are invalid for mingw linker
+
+# -z options are invalid for mingw linker, most of -f options are Linux-specific
 %define		filterout_ld	-Wl,-z,.*
+%define		filterout_c	-f[-a-z0-9=]*
 
 %description
 The libjpeg package contains a library of functions for manipulating
@@ -123,4 +125,4 @@ rm -rf $RPM_BUILD_ROOT
 
 %files dll
 %defattr(644,root,root,755)
-%{_dlldir}/libjpeg-*.dll
+%{_dlldir}/libjpeg-9.dll
