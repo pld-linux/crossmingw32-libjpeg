@@ -2,12 +2,12 @@
 Summary:	Library for handling different jpeg files - MinGW32 cross version
 Summary(pl.UTF-8):	Biblioteka do manipulacji plikami w formacie jpeg - wersja skrośna dla MinGW32
 Name:		crossmingw32-%{realname}
-Version:	9b
+Version:	9c
 Release:	1
 License:	distributable
 Group:		Development/Libraries
 Source0:	http://www.ijg.org/files/jpegsrc.v%{version}.tar.gz
-# Source0-md5:	6a9996ce116ec5c52b4870dbcd6d3ddb
+# Source0-md5:	93c62597eeef81a84d988bccbda1e990
 Patch0:		%{realname}-maxmem-sysconf.patch
 URL:		http://www.ijg.org/
 BuildRequires:	autoconf >= 2.50
@@ -25,6 +25,7 @@ BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 %define		_sysprefix		/usr
 %define		_prefix			%{_sysprefix}/%{target}
 %define		_libdir			%{_prefix}/lib
+%define		_pkgconfigdir		%{_prefix}/lib/pkgconfig
 %define		_dlldir			/usr/share/wine/windows/system
 %define		__cc			%{target}-gcc
 %define		__cxx			%{target}-g++
@@ -98,7 +99,11 @@ install jversion.h $RPM_BUILD_ROOT%{_includedir}
 sed -i -e 's#.*HAVE_STD..._H.*##g' $RPM_BUILD_ROOT%{_includedir}/jconfig.h
 
 install -d $RPM_BUILD_ROOT%{_dlldir}
-mv -f $RPM_BUILD_ROOT%{_prefix}/bin/*.dll $RPM_BUILD_ROOT%{_dlldir}
+%{__mv} $RPM_BUILD_ROOT%{_prefix}/bin/*.dll $RPM_BUILD_ROOT%{_dlldir}
+
+# drop binaries
+%{__rm} $RPM_BUILD_ROOT%{_bindir}/* \
+	$RPM_BUILD_ROOT%{_mandir}/man1/*.1
 
 %if 0%{!?debug:1}
 %{target}-strip --strip-unneeded -R.comment -R.note $RPM_BUILD_ROOT%{_dlldir}/*.dll
@@ -118,6 +123,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_includedir}/jmorecfg.h
 %{_includedir}/jpeglib.h
 %{_includedir}/jversion.h
+%{_pkgconfigdir}/libjpeg.pc
 
 %files static
 %defattr(644,root,root,755)
