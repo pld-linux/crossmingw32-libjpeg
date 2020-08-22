@@ -2,12 +2,12 @@
 Summary:	Library for handling different jpeg files - MinGW32 cross version
 Summary(pl.UTF-8):	Biblioteka do manipulacji plikami w formacie jpeg - wersja skrośna dla MinGW32
 Name:		crossmingw32-%{realname}
-Version:	9c
+Version:	9d
 Release:	1
 License:	distributable
 Group:		Development/Libraries
 Source0:	http://www.ijg.org/files/jpegsrc.v%{version}.tar.gz
-# Source0-md5:	93c62597eeef81a84d988bccbda1e990
+# Source0-md5:	693a4e10906e66467ca21f045547fe15
 Patch0:		%{realname}-maxmem-sysconf.patch
 URL:		http://www.ijg.org/
 BuildRequires:	autoconf >= 2.50
